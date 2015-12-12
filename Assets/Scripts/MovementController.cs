@@ -13,24 +13,18 @@ public class MovementController : MonoBehaviour
         character = new Character(body);
     }
 
-    // Per-frame update.
-    protected void UpdateController()
-    {
-        character.Update();
-    }
-
-    // Physics update.
-    protected void MoveController()
-    {
-        character.Move();
-    }
-
-    // Update grounded state.
+    // Notify character of ground and wall collision.
     void OnCollisionEnter2D(Collision2D collision)
     {
         foreach (ContactPoint2D contact in collision.contacts)
         {
             character.OnContactEvent(contact.normal);            
         }
+    }
+
+    // Notify persisting collisions to character.
+    void OnCollisionStay2D(Collision2D collision)
+    {
+        OnCollisionEnter2D(collision);
     }
 }

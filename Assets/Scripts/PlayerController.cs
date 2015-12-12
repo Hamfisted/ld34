@@ -11,46 +11,55 @@ public class PlayerController : MovementController
     // Per-frame controller update.
     void Update()
     {
-        ProcessInput();
-        UpdateController();
+        float horizontalMovement = ProcessHorizontalMovement();
+        ProcessHorizontalMovement();
+        bool applyFriction = (horizontalMovement == 0f);
+        ProcessVerticalMovement();
 
-        // Flag the controller to apply friction next update unless we bring more horizontal input.
-        character.hasFriction = true;
+        character.Update(applyFriction);
     }
 
     // Physics update.
     void FixedUpdate()
     {
-        MoveController();
+        character.Move();
     }
 
     // Process player input.
-    void ProcessInput()
+    // Returns the effective acceleration applied.
+    float ProcessHorizontalMovement()
     {
         // Side to side movement.
-        float horizontalDirection = 0f;
+        float horizontalMovement = 0f;
         if (Input.GetButton("Left"))
         {
-            horizontalDirection -= 1f;
+            horizontalMovement -= 1f;
         }
         if (Input.GetButton("Right"))
         {
-            horizontalDirection += 1f;
+            horizontalMovement += 1f;
         }
-        horizontalDirection *= character.Acceleration;
+        horizontalMovement *= character.Acceleration;
         if (!character.isGrounded)
         {
-            horizontalDirection *= character.AirControl;
-        }
-        else if (Input.GetButtonDown("Jump"))
-        {
-            character.Jump(character.JumpSpeed);
+            horizontalMovement *= character.AirControl;
         }
 
-        // Movement notifications set 
-        if (Mathf.Abs(horizontalDirection) >= Mathf.Epsilon)
+        // Notify of horizontal acceleration so we don't apply friction.
+        if (Mathf.Abs(horizontalMovement) >= Mathf.Epsilon)
         {
-            character.HorizontalAccelerate(horizontalDirection);
+            character.HorizontalAccelerate(horizontalMovement);
+            return horizontalMovement;
+        }
+        return 0f;
+    }
+
+    // Get vertical movement.
+    void ProcessVerticalMovement()
+    {
+        if (character.isGrounded && Input.GetButtonDown("Jump"))
+        {
+            character.Jump(character.JumpSpeed);
         }
     }
 }

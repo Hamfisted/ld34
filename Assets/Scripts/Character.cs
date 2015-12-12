@@ -20,21 +20,20 @@ public class Character
 
     // Movement state.
     private float horizontalVelocity;
+    private float wallDirection;
     public bool isGrounded { get; private set; }
-    public bool hasFriction { get; set; }
 
     public Character(Rigidbody2D characterBody)
     {
         body = characterBody;
         horizontalVelocity = 0f;
-        isGrounded = false;
-        hasFriction = false;
+        ResetContacts();
     }
 
-    public void Update()
+    public void Update(bool applyFriction)
     {
         // Apply friction if we're grounded and had no input.
-        if (hasFriction)
+        if (applyFriction)
         {
             float Deceleration = (isGrounded ? GroundDeceleration : AirDeceleration);
             float DecelerationDirection = (horizontalVelocity > 0f ? -1f : 1f);
@@ -53,9 +52,11 @@ public class Character
     public void HorizontalAccelerate(float acceleration)
     {
         // Don't allow acceleration into a wall or we can stick on it.
-        horizontalVelocity += (acceleration * Time.deltaTime);
+        if (acceleration * wallDirection >= 0f)
+        {
+            horizontalVelocity += (acceleration * Time.deltaTime);
+        }
         ClampVelocity();
-        hasFriction = false;
     }
 
     // Launch the character upwards.
@@ -90,6 +91,13 @@ public class Character
         horizontalVelocity = Mathf.Clamp(horizontalVelocity, -MaxSideVelocity, MaxSideVelocity);
     }
 
+    // Reset contact events before physics update notifies us of new and persisting contacts.
+    public void ResetContacts()
+    {
+        isGrounded = false;
+        wallDirection = 0f;
+    }
+
     // Handle collision events for movement.
     public void OnContactEvent(Vector2 normal)
     {
@@ -98,6 +106,7 @@ public class Character
         float absoluteY = Mathf.Abs(normal.y);
         if (absoluteX > absoluteY)
         {
+            wallDirection = normal.x;
             horizontalVelocity = 0f;
         }
         else if (normal.y > 0f)
