@@ -79,6 +79,9 @@ public class Character
     // Move the character to a given destination, bumping into things along the way.
     public void Move()
     {
+        // Reset contacts until next physics update.
+        ResetContacts();
+
         // Apply flat velocity.
         Vector2 velocity = body.velocity;
         velocity.x = horizontalVelocity;
@@ -92,9 +95,10 @@ public class Character
     }
 
     // Reset contact events before physics update notifies us of new and persisting contacts.
-    public void ResetContacts()
+    void ResetContacts()
     {
         wallDirection = 0f;
+        isGrounded = false;
     }
 
     // Handle collision events for movement.

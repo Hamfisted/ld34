@@ -28,7 +28,6 @@ public class PlayerController : MovementController
     // Set up for next physics update.
     void LateUpdate()
     {
-        ResetControllerState();
     }
 
     // Process player input.
