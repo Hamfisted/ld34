@@ -94,7 +94,6 @@ public class Character
     // Reset contact events before physics update notifies us of new and persisting contacts.
     public void ResetContacts()
     {
-        isGrounded = false;
         wallDirection = 0f;
     }
 
@@ -109,7 +108,7 @@ public class Character
             wallDirection = normal.x;
             horizontalVelocity = 0f;
         }
-        else if (normal.y > 0f)
+        else if ((body.velocity.y <= 0f) && (normal.y > 0f))
         {
             isGrounded = true;
         }

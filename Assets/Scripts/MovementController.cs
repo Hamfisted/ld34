@@ -13,6 +13,13 @@ public class MovementController : MonoBehaviour
         character = new Character(body);
     }
 
+    // After game update.
+    public void ResetControllerState()
+    {
+        // Reset until next frame comes around.
+        character.ResetContacts();
+    }
+
     // Notify character of ground and wall collision.
     void OnCollisionEnter2D(Collision2D collision)
     {

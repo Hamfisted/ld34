@@ -25,6 +25,12 @@ public class PlayerController : MovementController
         character.Move();
     }
 
+    // Set up for next physics update.
+    void LateUpdate()
+    {
+        ResetControllerState();
+    }
+
     // Process player input.
     // Returns the effective acceleration applied.
     float ProcessHorizontalMovement()
