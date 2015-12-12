@@ -16,7 +16,7 @@ public class Character
     [SerializeField] public float AirDeceleration = 5f;
 
     // Movement components.
-    private Rigidbody2D body;
+    public Rigidbody2D body;
 
     // Movement state.
     private float horizontalVelocity;
@@ -117,4 +117,5 @@ public class Character
             isGrounded = true;
         }
     }
+
 }
