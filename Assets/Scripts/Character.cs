@@ -16,14 +16,14 @@ public class Character
     [SerializeField] public float AirDeceleration = 5f;
 
     // Movement components.
-    private Rigidbody body;
+    private Rigidbody2D body;
 
     // Movement state.
     private float horizontalVelocity;
     public bool isGrounded { get; private set; }
     public bool hasFriction { get; set; }
 
-    public Character(Rigidbody characterBody)
+    public Character(Rigidbody2D characterBody)
     {
         body = characterBody;
         horizontalVelocity = 0f;
@@ -61,14 +61,14 @@ public class Character
     // Launch the character upwards.
     public void Jump(float verticalVelocity)
     {
-        Vector3 velocity = body.velocity;
+        Vector2 velocity = body.velocity;
         velocity.y = verticalVelocity;
         body.velocity = velocity;
         isGrounded = false;
     }
 
     // Override the character's horizontal and vertical velocity.
-    public void SetVelocity(Vector3 newVelocity)
+    public void SetVelocity(Vector2 newVelocity)
     {
         horizontalVelocity = newVelocity.x;
         Jump(newVelocity.y);
@@ -79,7 +79,7 @@ public class Character
     public void Move()
     {
         // Apply flat velocity.
-        Vector3 velocity = body.velocity;
+        Vector2 velocity = body.velocity;
         velocity.x = horizontalVelocity;
         body.velocity = velocity;
     }
@@ -91,7 +91,7 @@ public class Character
     }
 
     // Handle collision events for movement.
-    public void OnContactEvent(Vector3 normal)
+    public void OnContactEvent(Vector2 normal)
     {
         // Cancel horizontal velocity if we hit a wall.
         float absoluteX = Mathf.Abs(normal.x);

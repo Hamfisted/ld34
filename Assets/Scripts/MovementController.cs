@@ -1,8 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-[RequireComponent (typeof (Rigidbody))]
-[RequireComponent (typeof (BoxCollider))]
+[RequireComponent (typeof (Rigidbody2D))]
 public class MovementController : MonoBehaviour
 {
     // Character being controlled.
@@ -10,7 +9,7 @@ public class MovementController : MonoBehaviour
 
     protected void Initialize()
     {
-        Rigidbody body = GetComponent<Rigidbody>();
+        Rigidbody2D body = GetComponent<Rigidbody2D>();
         character = new Character(body);
     }
 
@@ -27,9 +26,9 @@ public class MovementController : MonoBehaviour
     }
 
     // Update grounded state.
-    void OnCollisionEnter(Collision collision)
+    void OnCollisionEnter2D(Collision2D collision)
     {
-        foreach (ContactPoint contact in collision.contacts)
+        foreach (ContactPoint2D contact in collision.contacts)
         {
             character.OnContactEvent(contact.normal);            
         }
