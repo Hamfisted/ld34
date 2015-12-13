@@ -3,6 +3,8 @@ using System.Collections;
 
 public class PlayerCharacter: Character
 {
+    [SerializeField] public float JumpHeight = 8f;
+
     void Start()
     {
         StartCharacter();
@@ -47,10 +49,10 @@ public class PlayerCharacter: Character
         {
             horizontalMovement += 1f;
         }
-        horizontalMovement *= physics.Acceleration;
+        horizontalMovement *= Acceleration;
         if (!physics.isGrounded)
         {
-            horizontalMovement *= physics.AirControl;
+            horizontalMovement *= AirControl;
         }
 
         // Notify of horizontal acceleration so we don't apply friction.
@@ -67,12 +69,8 @@ public class PlayerCharacter: Character
     {
         if (physics.isGrounded && Input.GetButtonDown("Jump"))
         {
-            physics.Jump(physics.JumpSpeed);
+            float JumpSpeed = Mathf.Sqrt(-2f * Physics2D.gravity.y * JumpHeight);
+            physics.Jump(JumpSpeed);
         }
-    }
-
-    void OnTriggerEnter2D(Collider2D triggerCollider)
-    {
-        Debug.Log("Entered");
     }
 }

@@ -3,17 +3,14 @@ using System.Collections;
 
 public class CharacterPhysics
 {
-    // Movement parameters.
-    [SerializeField] public float Acceleration = 50f;
-    [SerializeField] public float JumpSpeed = 10f;
-    [SerializeField] public float MaxSideVelocity = 10f;
-    [SerializeField] public float AirControl = 0.75f;
+    // Generate game parameters.
+    public const float MaxSideVelocity = 10f;
 
     // We want to apply friction manually:
     // 1. Better control when moving on the ground; don't need friction unless player isn't putting in input.
     // 2. Don't want to "rub" down a wall if you're moving into it.
-    [SerializeField] public float GroundDeceleration = 15f;
-    [SerializeField] public float AirDeceleration = 5f;
+    public const float GroundDeceleration = 15f;
+    public const float AirDeceleration = 5f;
 
     // Movement components.
     private Rigidbody2D body;

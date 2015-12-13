@@ -43,7 +43,7 @@ public class PathManager : MonoBehaviour
     // Search for a path from one node to another.
     // Currently just breadth first search.
     // Returns empty list if no path can be found.
-    List<PathNode> Search(PathNode start, PathNode end)
+    public List<PathNode> Search(PathNode start, PathNode end)
     {
         List<PathNode> result = new List<PathNode>();
         List<PathLink> open = new List<PathLink>();
@@ -69,10 +69,8 @@ public class PathManager : MonoBehaviour
             if (currentNode == end)
             {
                 result.Add(end);
-                int rofl = 0;
                 for (int j = current.lastIndex; j != -1; j = current.lastIndex)
                 {
-                    if (rofl++ > 30) break;
                     current = open[j];
                     result.Insert(0, current.node);
                 }
@@ -80,7 +78,6 @@ public class PathManager : MonoBehaviour
             }
 
             // Add its children to the open list.
-            int lol = 0;
             foreach (PathNode child in currentNode.nodes)
             {
                 if (!explored.Contains(child))
@@ -89,9 +86,7 @@ public class PathManager : MonoBehaviour
                     PathLink newLink = new PathLink(i, child);
                     open.Add(newLink);
                 }
-                if (lol++ > 30) break;
             }
-            if (i > 30) break;
         }
 
         return result;

@@ -1,19 +1,29 @@
 using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(Rigidbody2D))]
 public class Character : MonoBehaviour
 {
+    // Movement parameters.
+    [SerializeField] public float Acceleration = 50f;
+    [SerializeField] public float AirControl = 0.75f;
+
     // Component managers.
     protected Animator animator;
     protected CharacterPhysics physics;
+
+    // Navigation nodes.
+    public HashSet<PathNode> nodes { get; protected set; }
+    public PathNode latestNode { get; protected set; }
 
     protected void StartCharacter()
     {
         animator = GetComponent<Animator>();
         Rigidbody2D body = GetComponent<Rigidbody2D>();
         physics = new CharacterPhysics(body);
+        nodes = new HashSet<PathNode>();
+        latestNode = null;
     }
 
     // Per frame character update.
@@ -54,5 +64,26 @@ public class Character : MonoBehaviour
     void OnCollisionStay2D(Collision2D collision)
     {
         OnCollisionEnter2D(collision);
+    }
+
+    // Handle trigger enter events to get which node we're in.
+    void OnTriggerEnter2D(Collider2D collider)
+    {
+        PathNode node = collider.GetComponentInParent<PathNode>();
+        if (node != null)
+        {
+            nodes.Add(node);
+            latestNode = node;
+        }
+    }
+
+    // Handle trigger exit to find out when we're not in any navigation nodes.
+    void OnTriggerExit2D(Collider2D collider)
+    {
+        PathNode node = collider.GetComponentInParent<PathNode>();
+        if (node != null)
+        {
+            nodes.Remove(node);
+        }
     }
 }
