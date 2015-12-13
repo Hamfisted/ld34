@@ -92,4 +92,9 @@ public class PlayerController : MovementController
             character.Jump(character.JumpSpeed);
         }
     }
+
+    void OnTriggerEnter2D(Collider2D triggerCollider)
+    {
+        Debug.Log("Entered");
+    }
 }
