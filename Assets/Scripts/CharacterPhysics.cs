@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class Character
+public class CharacterPhysics
 {
     // Movement parameters.
     [SerializeField] public float Acceleration = 50f;
@@ -16,14 +16,14 @@ public class Character
     [SerializeField] public float AirDeceleration = 5f;
 
     // Movement components.
-    public Rigidbody2D body;
+    private Rigidbody2D body;
 
     // Movement state.
     private float horizontalVelocity;
     private float wallDirection;
     public bool isGrounded { get; private set; }
 
-    public Character(Rigidbody2D characterBody)
+    public CharacterPhysics(Rigidbody2D characterBody)
     {
         body = characterBody;
         horizontalVelocity = 0f;
@@ -66,6 +66,12 @@ public class Character
         velocity.y = verticalVelocity;
         body.velocity = velocity;
         isGrounded = false;
+    }
+
+    // Get the body's current velocity.
+    public Vector3 GetVelocity()
+    {
+        return body.velocity;
     }
 
     // Override the character's horizontal and vertical velocity.

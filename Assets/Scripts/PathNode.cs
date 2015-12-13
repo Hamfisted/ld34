@@ -24,7 +24,7 @@ public class PathNode : MonoBehaviour
     void OnTriggerEnter2D(Collider2D collider)
     {
         PathNode node = collider.GetComponentInParent<PathNode>();
-        if (node != this)
+        if ((node != null) && (node != this))
         {
             nodes.Add(node);
         }
