@@ -1,33 +1,47 @@
 using UnityEngine;
 using System.Collections;
 
-public class PlayerCharacter: Character
+[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(BoxCollider2D))]
+public class PlayerCharacter : Character
 {
     [SerializeField] public float JumpHeight = 8f;
 
+    // Player movement components.
+    private BoxCollider2D box;
+
+    // Player movement state.
+    private Vector2 position;
+    private Vector2 velocity;
+    private bool isGrounded;
+
     void Start()
     {
+        // Set up components.
         StartCharacter();
+        box = GetComponent<BoxCollider2D>();
+
+        // Default state.
+        position = body.position;
+        velocity = new Vector2();
+        isGrounded = false;
+
+        // Set up permanent animator values.
+        animator.SetFloat("Forward", 1f);
     }
 
     // Per-frame controller update.
     void Update()
     {
-        // Handle player specific movement.
-        float horizontalMovement = ProcessHorizontalMovement();
-        ProcessHorizontalMovement();
-        bool applyFriction = (horizontalMovement == 0f);
-        ProcessVerticalMovement();
-        physics.Update(applyFriction);
-
-        // send input and other state parameters to the animator
+        UpdateMovement();
         UpdateAnimator();
     }
 
     // Physics update.
     void FixedUpdate()
     {
-        MoveCharacter();
+        // Apply movement.
+        body.MovePosition(position);
     }
 
     // Set up for next physics update.
@@ -35,42 +49,66 @@ public class PlayerCharacter: Character
     {
     }
 
-    // Process player input.
-    // Returns the effective acceleration applied.
-    float ProcessHorizontalMovement()
+    // Update the movement of the player.
+    void UpdateMovement()
     {
-        // Side to side movement.
-        float horizontalMovement = 0f;
-        if (Input.GetButton("Left"))
-        {
-            horizontalMovement -= 1f;
-        }
-        if (Input.GetButton("Right"))
-        {
-            horizontalMovement += 1f;
-        }
-        horizontalMovement *= Acceleration;
-        if (!physics.isGrounded)
-        {
-            horizontalMovement *= AirControl;
-        }
+        // Apply gravity.
+        velocity += (Physics2D.gravity * Time.deltaTime);
 
-        // Notify of horizontal acceleration so we don't apply friction.
-        if (Mathf.Abs(horizontalMovement) >= Mathf.Epsilon)
-        {
-            physics.HorizontalAccelerate(horizontalMovement);
-            return horizontalMovement;
-        }
-        return 0f;
-    }
-
-    // Get vertical movement.
-    void ProcessVerticalMovement()
-    {
-        if (physics.isGrounded && Input.GetButtonDown("Jump"))
+        // Check if we can jump.
+        if (isGrounded && Input.GetButtonDown("Jump"))
         {
             float JumpSpeed = Mathf.Sqrt(-2f * Physics2D.gravity.y * JumpHeight);
-            physics.Jump(JumpSpeed);
+            velocity.y = JumpSpeed;
+            isGrounded = false;
+            return;
         }
+
+        // Check if we have floor below us if we're falling.
+        Vector2 velocityDelta = velocity * Time.deltaTime;
+        Vector2 newPosition = position + velocityDelta;
+        if (velocityDelta.y < 0f)
+        {
+            // Get the platforms we're possibly touching.
+            Vector2 extents = box.size * 0.5f;
+            Vector2 min = position - extents + velocityDelta;
+            Vector2 max = position + extents;
+            Collider2D[] colliders = Physics2D.OverlapAreaAll(min, max);
+            
+            // Look for a hit on a platform.
+            foreach (Collider2D collider in colliders)
+            {
+                float maxY = collider.bounds.max.y;
+                if ((position.y >= maxY) && (newPosition.y < maxY))
+                {
+                    if (collider.CompareTag("Floor") || collider.CompareTag("Platform"))
+                    {
+                        position.y = maxY;
+                        velocity.y = 0f;
+                        isGrounded = true;
+                        return;
+                    }
+                  
+                }
+            }
+        }
+        position = newPosition;
+    }
+
+    // Per frame character update.
+    protected virtual void UpdateAnimator()
+    {
+        animator.SetBool("OnGround", isGrounded);
+        if (!isGrounded)
+        {
+            animator.SetFloat("Jump", velocity.y);
+        }
+
+        // calculate which leg is behind, so as to leave that leg trailing in the jump animation
+        // (This code is reliant on the specific run cycle offset in our animations,
+        // and assumes one leg passes the other at the normalized clip times of 0.0 and 0.5)
+        float runCycleLegOffset = 0f;
+        float runCycle =
+            Mathf.Repeat(animator.GetCurrentAnimatorStateInfo(0).normalizedTime + runCycleLegOffset, 1);
     }
 }
