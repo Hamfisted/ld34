@@ -5,7 +5,6 @@ using System.Collections;
 [RequireComponent(typeof(Rigidbody2D))]
 public class SandwichPickup : MonoBehaviour
 {
-
     // Use this for initialization
     void Start()
     {

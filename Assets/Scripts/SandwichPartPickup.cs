@@ -5,14 +5,11 @@ using System.Collections;
 public class SandwichPartPickup : MonoBehaviour
 {
     [SerializeField] public SandwichInventory.SandwichPart Type;
-    static SandwichResources resources;
 
     // Use this for initialization
     void Start()
     {
-        resources = FindObjectOfType<SandwichResources>();
-        mSprites = new Sprite[(int)SandwichInventory.SandwichPart.NumParts];
-        GetComponent<SpriteRenderer>().sprite = resources.SandwichSprites[(int)Type];
+        GetComponent<SpriteRenderer>().sprite = FindObjectOfType<SandwichResources>().SandwichSprites[(int)Type];
     }
 
     // Update is called once per frame
@@ -29,6 +26,4 @@ public class SandwichPartPickup : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
-    Sprite[] mSprites;
 }
