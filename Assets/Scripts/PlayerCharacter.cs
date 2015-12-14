@@ -32,9 +32,6 @@ public class PlayerCharacter : Character
         velocity = new Vector2();
         isGrounded = false;
         isHoldingJump = false;
-
-        // Set up permanent animator values.
-        animator.SetFloat("Forward", 1f);
     }
 
     // Per-frame controller update.
@@ -117,17 +114,6 @@ public class PlayerCharacter : Character
     protected virtual void UpdateAnimator()
     {
         animator.SetBool("OnGround", isGrounded);
-        if (!isGrounded)
-        {
-            animator.SetFloat("Jump", velocity.y);
-        }
-
-        // calculate which leg is behind, so as to leave that leg trailing in the jump animation
-        // (This code is reliant on the specific run cycle offset in our animations,
-        // and assumes one leg passes the other at the normalized clip times of 0.0 and 0.5)
-        float runCycleLegOffset = 0f;
-        float runCycle =
-            Mathf.Repeat(animator.GetCurrentAnimatorStateInfo(0).normalizedTime + runCycleLegOffset, 1);
     }
 
     void UpdateActions()
