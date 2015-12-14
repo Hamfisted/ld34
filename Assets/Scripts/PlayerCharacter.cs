@@ -5,8 +5,8 @@ using System.Collections;
 [RequireComponent(typeof(BoxCollider2D))]
 public class PlayerCharacter : Character
 {
-    [SerializeField] public float JumpHeight = 6f;
-    [SerializeField] public float HoldGravityAttenuation = 0.65f;
+    [SerializeField] public float JumpHeight = 3f;
+    [SerializeField] public float HoldGravityAttenuation = 0.4f;
 
     // Player movement components.
     private BoxCollider2D box;
@@ -14,7 +14,7 @@ public class PlayerCharacter : Character
     // Player movement state.
     private Vector2 position;
     private Vector2 velocity;
-    private bool isGrounded;
+    public bool isGrounded { get; private set; }
     private bool isHoldingJump;
 
     void Start()
