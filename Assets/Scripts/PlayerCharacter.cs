@@ -5,7 +5,8 @@ using System.Collections;
 [RequireComponent(typeof(BoxCollider2D))]
 public class PlayerCharacter : Character
 {
-    [SerializeField] public float JumpHeight = 8f;
+    [SerializeField] public float JumpHeight = 6f;
+    [SerializeField] public float HoldGravityAttenuation = 0.65f;
 
     // Player movement components.
     private BoxCollider2D box;
@@ -14,6 +15,7 @@ public class PlayerCharacter : Character
     private Vector2 position;
     private Vector2 velocity;
     private bool isGrounded;
+    private bool isHoldingJump;
 
     void Start()
     {
@@ -25,6 +27,7 @@ public class PlayerCharacter : Character
         position = body.position;
         velocity = new Vector2();
         isGrounded = false;
+        isHoldingJump = false;
 
         // Set up permanent animator values.
         animator.SetFloat("Forward", 1f);
@@ -52,17 +55,26 @@ public class PlayerCharacter : Character
     // Update the movement of the player.
     void UpdateMovement()
     {
-        // Apply gravity.
-        velocity += (Physics2D.gravity * Time.deltaTime);
-
-        // Check if we can jump.
-        if (isGrounded && Input.GetButtonDown("Jump"))
+        if (Input.GetButtonDown("Jump"))
         {
-            float JumpSpeed = Mathf.Sqrt(-2f * Physics2D.gravity.y * JumpHeight);
-            velocity.y = JumpSpeed;
-            isGrounded = false;
-            return;
+            // Check if we can jump.
+            if (isGrounded)
+            {
+                float JumpSpeed = Mathf.Sqrt(-2f * Physics2D.gravity.y * JumpHeight);
+                velocity.y = JumpSpeed;
+                isGrounded = false;
+                isHoldingJump = true;
+                return;
+            }
         }
+        else if (!Input.GetButton("Jump"))
+        {
+            isHoldingJump = false;
+        }
+
+        // Apply gravity.
+        float attenuation = (isHoldingJump ? HoldGravityAttenuation : 1f);
+        velocity += (Physics2D.gravity * Time.deltaTime * attenuation);
 
         // Check if we have floor below us if we're falling.
         Vector2 velocityDelta = velocity * Time.deltaTime;
