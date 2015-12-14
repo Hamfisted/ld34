@@ -3,10 +3,14 @@ using System.Collections;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(BoxCollider2D))]
+[RequireComponent(typeof(SandwichInventory))]
 public class PlayerCharacter : Character
 {
     [SerializeField] public float JumpHeight = 3f;
     [SerializeField] public float HoldGravityAttenuation = 0.4f;
+
+    [SerializeField] public float SandwichForceX = -1000.0f;
+    [SerializeField] public float SandwichForceY = 500.0f;
 
     // Player movement components.
     private BoxCollider2D box;
@@ -38,6 +42,7 @@ public class PlayerCharacter : Character
     {
         UpdateMovement();
         UpdateAnimator();
+        UpdateActions();
     }
 
     // Physics update.
@@ -123,5 +128,21 @@ public class PlayerCharacter : Character
         float runCycleLegOffset = 0f;
         float runCycle =
             Mathf.Repeat(animator.GetCurrentAnimatorStateInfo(0).normalizedTime + runCycleLegOffset, 1);
+    }
+
+    void UpdateActions()
+    {
+        if (Input.GetButtonDown("ThrowSandwich"))
+        {
+            var sandy = gameObject.GetComponent<SandwichInventory>().UseSandwich();
+            if (sandy)
+            {
+                var trans = sandy.GetComponent<Transform>();
+                trans.position = gameObject.transform.position;
+
+                var body = sandy.GetComponent<Rigidbody2D>();
+                body.AddForce(new Vector2(SandwichForceX, SandwichForceY));
+            }
+        }
     }
 }

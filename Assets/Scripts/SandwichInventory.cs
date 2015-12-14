@@ -17,7 +17,7 @@ public class SandwichInventory : MonoBehaviour
     [SerializeField] public int NumRequiredMeat = 1;
     [SerializeField] public int NumRequiredLettuce = 1;
     [SerializeField] public int NumRequiredTomato = 1;
-    [SerializeField] public Object SandwichType;
+    [SerializeField] public GameObject SandwichType;
 
     // Use this for initialization
     void Start()
@@ -55,15 +55,18 @@ public class SandwichInventory : MonoBehaviour
         return (true);
     }
 
-    public bool UseSandwich()
+    public GameObject UseSandwich()
     {
+        GameObject sandwich = null;
         if (mNumSandwiches > 0)
         {
-            Instantiate(SandwichType, transform.position, transform.rotation);
-            mNumSandwiches -= 1;
-            return (true);
+            sandwich = Instantiate(SandwichType);
+            if(sandwich)
+            {
+                mNumSandwiches -= 1;
+            }
         }
-        return (false);
+        return (sandwich);
     }
 
     bool HasEnoughPartsForSandwich()
