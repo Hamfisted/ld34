@@ -92,6 +92,7 @@ public class PlayerCharacter : Character
                 }
             }
         }
+        isGrounded = false;
         position = newPosition;
     }
 
