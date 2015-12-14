@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(BoxCollider2D))]
@@ -130,5 +131,11 @@ public class PlayerCharacter : Character
                 body.AddForce(new Vector2(SandwichForceX, SandwichForceY));
             }
         }
+
+        if (Input.GetButtonDown("Restart"))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
     }
+
 }
