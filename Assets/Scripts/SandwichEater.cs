@@ -7,6 +7,7 @@ public class SandwichEater : MonoBehaviour
     [SerializeField] public int MaxFat = 3;
     [SerializeField] public float MaxAngerHungryTime = 60f;
     [SerializeField] public float eatHungerTimeSubtract = 10f;
+    [SerializeField] public float eatPlayerTimeSubtract = 5f;
     [SerializeField] private float MaxScale = 1.5f;
 
     protected Animator animator;
@@ -35,7 +36,7 @@ public class SandwichEater : MonoBehaviour
     {
         animator.SetTrigger("Chomp");
         animator.SetLayerWeight(1, 1f);
-        timeSinceFood = Mathf.Max(0f, timeSinceFood - eatHungerTimeSubtract * 0.5f);
+        timeSinceFood = Mathf.Max(0f, timeSinceFood - eatPlayerTimeSubtract);
     }
 
     public void EatSandwich()

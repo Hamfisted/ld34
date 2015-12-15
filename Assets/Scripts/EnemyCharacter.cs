@@ -7,7 +7,7 @@ public class EnemyCharacter : Character
 {
     [SerializeField] public float JumpPeakOffset = 2f;
     [SerializeField] private PlayerCharacter player;
-    [SerializeField] private float AngerSmoothTime = 2f;
+    [SerializeField] private float AngerSmoothTime = 0.5f;
 
     // Enemy gameplay state.
     private GameObject target;
@@ -33,9 +33,9 @@ public class EnemyCharacter : Character
         if (!isDead)
         {
             timeSinceEatPlayer = Mathf.Min(eater.MaxAngerHungryTime, timeSinceEatPlayer + Time.deltaTime);
-            angerFactor = eater.timeSinceFood / eater.MaxAngerHungryTime;
-
-            if (angerFactor >= 1f && player.offPlatform && timeSinceEatPlayer >= eater.eatHungerTimeSubtract)
+            float dampFactor = Mathf.Pow(eater.timeSinceFood / eater.MaxAngerHungryTime, 2f);
+            angerFactor = Mathf.SmoothDamp(angerFactor, dampFactor, ref angerVelocity, AngerSmoothTime);
+            if (angerFactor >= 0.95f && player.offPlatform && timeSinceEatPlayer >= eater.eatPlayerTimeSubtract)
             {
                 timeSinceEatPlayer = 0f;
                 eater.EatPlayer();
@@ -51,10 +51,8 @@ public class EnemyCharacter : Character
         {
             if (!player.isDead)
             {
-                float smoothedFactor = Mathf.Pow(angerFactor, 3f);
-                float targetX = Mathf.Lerp(spawnPosition.x, player.GetBodyPosition().x - 1f, angerFactor);
-                float currentX = Mathf.SmoothDamp(body.position.x, targetX, ref angerVelocity, AngerSmoothTime);
-                Vector2 position = new Vector2(currentX, body.position.y);
+                float targetX = Mathf.Lerp(spawnPosition.x, player.GetBodyPosition().x - 0.5f, angerFactor);
+                Vector2 position = new Vector2(targetX, body.position.y);
 
                 body.MovePosition(position);
             }
