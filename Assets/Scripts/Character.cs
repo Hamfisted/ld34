@@ -14,4 +14,9 @@ public class Character : MonoBehaviour
         animator = GetComponent<Animator>();
         body = GetComponent<Rigidbody2D>();
     }
+
+    public Vector2 GetBodyPosition()
+    {
+        return body.position;
+    }
 }

@@ -132,7 +132,7 @@ public class GameController : MonoBehaviour
                 Platform latest = platforms[platforms.Count - 1];
                 Vector2 lastPosition = latest.body.position;
                 float lastSize = latest.box.bounds.size.x;
-                float platformGap = jumpDistance + (lastSize * 0.5f);
+                float platformGap = jumpDistance + (lastSize);
                 float newY = (player.offPlatform ? spawnPoint.y : lastPosition.y);
                 Vector2 nextPosition = new Vector2(lastPosition.x + platformGap, newY);
                 float distance = spawnPoint.x - lastPosition.x;
