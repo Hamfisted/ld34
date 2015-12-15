@@ -39,11 +39,7 @@ public class EnemyCharacter : Character
             {
                 timeSinceEatPlayer = 0f;
                 eater.EatPlayer();
-                player.health--;
-                if(player.health == 0)
-                {
-                    player.isDead = true;
-                }
+                player.TakeDamage();
             }
         }
         UpdateAnimator();

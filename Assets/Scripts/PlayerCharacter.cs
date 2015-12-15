@@ -63,6 +63,15 @@ public class PlayerCharacter : Character
     {
     }
 
+    public void TakeDamage()
+    {
+        health--;
+        if (health == 0)
+        {
+            isDead = true;
+        }
+    }
+
     // Update the movement of the player.
     void UpdateMovement()
     {
