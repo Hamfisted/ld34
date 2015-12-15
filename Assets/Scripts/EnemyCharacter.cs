@@ -49,12 +49,19 @@ public class EnemyCharacter : Character
     {
         if (!isDead)
         {
-            float smoothedFactor = Mathf.Pow(angerFactor, 3f);
-            float targetX = Mathf.Lerp(spawnPosition.x, player.GetBodyPosition().x - 1f, angerFactor);
-            float currentX = Mathf.SmoothDamp(body.position.x, targetX, ref angerVelocity, AngerSmoothTime);
-            Vector2 position = new Vector2(currentX, body.position.y);
+            if (!player.isDead)
+            {
+                float smoothedFactor = Mathf.Pow(angerFactor, 3f);
+                float targetX = Mathf.Lerp(spawnPosition.x, player.GetBodyPosition().x - 1f, angerFactor);
+                float currentX = Mathf.SmoothDamp(body.position.x, targetX, ref angerVelocity, AngerSmoothTime);
+                Vector2 position = new Vector2(currentX, body.position.y);
 
-            body.MovePosition(position);
+                body.MovePosition(position);
+            }
+            else if (body.position.x < 64f)
+            {
+                body.MovePosition(body.position + (Time.fixedDeltaTime * new Vector2(5f, 0f)));
+            }
         }
     }
 

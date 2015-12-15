@@ -20,7 +20,7 @@ public class SandwichPickup : MonoBehaviour
         {
             Vector2 pos = transform.position;
             Vector2 diff = (character.GetBodyPosition() - pos);
-            if (Mathf.Abs(diff.x) < 2f * character.gameObject.transform.localScale.x && Mathf.Abs(diff.y) < 4f * character.gameObject.transform.localScale.y)
+            if (Mathf.Abs(diff.x) <= 1f * character.gameObject.transform.localScale.x && Mathf.Abs(diff.y) <= 2f * character.gameObject.transform.localScale.y)
             {
                 eater.EatSandwich();
                 Destroy(gameObject);
