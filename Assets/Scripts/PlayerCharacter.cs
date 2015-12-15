@@ -78,7 +78,7 @@ public class PlayerCharacter : Character
         if (Input.GetButtonDown("Jump"))
         {
             // Check if we can jump.
-            if (isGrounded)
+            if (isGrounded && !hasWon && !isDead)
             {
                 float JumpSpeed = Mathf.Sqrt(-2f * Physics2D.gravity.y * JumpHeight);
                 velocity.y = JumpSpeed;
@@ -162,6 +162,12 @@ public class PlayerCharacter : Character
         if (Input.GetButtonDown("Restart"))
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+
+        if (Input.GetButtonDown("Quit"))
+        {
+            Debug.Log("HELLO");
+            Application.Quit();
         }
     }
 
