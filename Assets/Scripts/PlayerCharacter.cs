@@ -24,6 +24,7 @@ public class PlayerCharacter : Character
     public bool offPlatform { get; private set; }
     public bool isDead = false;
     public bool hasWon = false;
+    public int health;
 
     void Start()
     {
@@ -37,6 +38,9 @@ public class PlayerCharacter : Character
         isGrounded = false;
         isHoldingJump = false;
         offPlatform = false;
+        isDead = false;
+        hasWon = false;
+        health = 3;
     }
 
     // Per-frame controller update.
