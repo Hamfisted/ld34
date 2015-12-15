@@ -22,6 +22,8 @@ public class PlayerCharacter : Character
     public bool isGrounded { get; private set; }
     private bool isHoldingJump;
     public bool offPlatform { get; private set; }
+    public bool isDead = false;
+    public bool hasWon = false;
 
     void Start()
     {

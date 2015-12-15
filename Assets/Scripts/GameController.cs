@@ -38,6 +38,10 @@ public class GameController : MonoBehaviour
     Vector2 spawnPoint;
     List<Platform> platforms;
 
+    // I'm sorry
+    float timeSinceHaltingBegan = 0;
+    float speedWhenHaltingBegan;
+
     void Start()
     {
         body = GetComponent<Rigidbody2D>();
@@ -56,7 +60,23 @@ public class GameController : MonoBehaviour
 
     void Update()
     {
-        scrollSpeed = Mathf.Min(scrollSpeed + (Time.deltaTime * 1f), maximumSpeed);
+        if (finished)
+        {
+            HaltScrolling();
+        }
+        else
+        {
+            scrollSpeed = Mathf.Min(scrollSpeed + (Time.deltaTime * 1f), maximumSpeed);
+
+            if (player.isDead)
+            {
+                Lose();
+            }
+            else if (enemy.isDead)
+            {
+                Win();
+            }
+        }
     }
 
     void FixedUpdate()
@@ -138,6 +158,39 @@ public class GameController : MonoBehaviour
             }
             yield return null;
         }
+    }
+
+    void Win()
+    {
+        GameOver();
+        player.hasWon = true;
+    }
+
+    void Lose()
+    {
+        GameOver();
+    }
+
+    void GameOver()
+    {
+        if (!finished) {
+            finished = true;
+            speedWhenHaltingBegan = scrollSpeed;
+            enemy.Die();
+        }
+    }
+
+    void HaltScrolling()
+    {
+        float k = 3.0f;
+        timeSinceHaltingBegan += Time.deltaTime * k;
+
+        //cubic ease-out
+        float f = timeSinceHaltingBegan - 1.0f;
+        f = f * f * f + 1.0f;
+
+        f = 1.0f - Mathf.Min(f, 1.0f);
+        scrollSpeed = f * speedWhenHaltingBegan;
     }
 
 }
