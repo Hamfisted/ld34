@@ -65,6 +65,10 @@ public class PlayerCharacter : Character
     public void TakeDamage()
     {
         isDead = GetComponent<PlayerHealth>().TakeDamage(1);
+        if (!isDead) {
+            animator.SetTrigger("Attacked");
+            animator.SetLayerWeight(1, 1);
+        }
     }
 
     // Update the movement of the player.
