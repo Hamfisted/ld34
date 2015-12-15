@@ -7,8 +7,8 @@ using UnityEngine.SceneManagement;
 [RequireComponent(typeof(SandwichInventory))]
 public class PlayerCharacter : Character
 {
-    [SerializeField] public float JumpHeight = 3f;
-    [SerializeField] public float HoldGravityAttenuation = 0.4f;
+    [SerializeField] public float JumpHeight = 2f;
+    [SerializeField] public float HoldGravityAttenuation = 0.25f;
 
     [SerializeField] public float SandwichForceX = -1000.0f;
     [SerializeField] public float SandwichForceY = 500.0f;
