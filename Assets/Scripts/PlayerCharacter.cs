@@ -125,6 +125,7 @@ public class PlayerCharacter : Character
     protected virtual void UpdateAnimator()
     {
         animator.SetBool("OnGround", isGrounded);
+        animator.SetBool("HasWon", hasWon);
     }
 
     void UpdateActions()
@@ -139,6 +140,9 @@ public class PlayerCharacter : Character
 
                 var body = sandy.GetComponent<Rigidbody2D>();
                 body.AddForce(new Vector2(SandwichForceX, SandwichForceY));
+
+                animator.SetTrigger("Throw");
+                animator.SetLayerWeight(1, 1);
             }
         }
 
