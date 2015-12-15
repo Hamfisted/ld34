@@ -32,7 +32,7 @@ public class EnemyCharacter : Character
     {
         if (!isDead)
         {
-            timeSinceEatPlayer += Time.deltaTime;
+            timeSinceEatPlayer = Mathf.Min(eater.MaxAngerHungryTime, timeSinceEatPlayer + Time.deltaTime);
             angerFactor = eater.timeSinceFood / eater.MaxAngerHungryTime;
 
             if (angerFactor >= 1f && player.offPlatform && timeSinceEatPlayer >= eater.eatHungerTimeSubtract)
