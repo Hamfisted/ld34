@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections;
 
-[RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(BoxCollider2D))]
 public class Platform : MonoBehaviour
 {
@@ -10,7 +9,7 @@ public class Platform : MonoBehaviour
 
     void Start()
     {
-        body = GetComponent<Rigidbody2D>();
+        body = GetComponentInParent<Rigidbody2D>();
         box = GetComponent<BoxCollider2D>();
     }
 

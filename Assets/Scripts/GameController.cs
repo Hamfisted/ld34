@@ -6,7 +6,7 @@ using System.Collections.Generic;
 public class GameController : MonoBehaviour
 {
     // Prefab type to spawn.
-    [SerializeField] GameObject platformType;
+    [SerializeField] GameObject[] platformTypes;
 
     // Characters to manage.
     [SerializeField] EnemyCharacter enemy;
@@ -94,8 +94,9 @@ public class GameController : MonoBehaviour
         {
             if (platforms.Count == 0)
             {
-                GameObject newPlatform = Instantiate(platformType, spawnPoint, Quaternion.identity) as GameObject;
-                Platform platform = newPlatform.GetComponent<Platform>();
+                int type = Random.Range(0, platformTypes.Length);
+                GameObject newPlatform = Instantiate(platformTypes[type], spawnPoint, Quaternion.identity) as GameObject;
+                Platform platform = newPlatform.GetComponentInChildren<Platform>();
                 platforms.Add(platform);
             }
             else
@@ -125,8 +126,9 @@ public class GameController : MonoBehaviour
                         nextPosition.y += offset;
                     }
 
-                    GameObject newPlatform = Instantiate(platformType, nextPosition, Quaternion.identity) as GameObject;
-                    Platform platform = newPlatform.GetComponent<Platform>();
+                    int type = Random.Range(0, platformTypes.Length);
+                    GameObject newPlatform = Instantiate(platformTypes[type], nextPosition, Quaternion.identity) as GameObject;
+                    Platform platform = newPlatform.GetComponentInChildren<Platform>();
                     platforms.Add(platform);
                     nextPosition.x += platformGap;
                 }

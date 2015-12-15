@@ -4,11 +4,12 @@ using System.Collections;
 [RequireComponent(typeof(SpriteRenderer))]
 public class SandwichPartPickup : MonoBehaviour
 {
-    [SerializeField] public SandwichInventory.SandwichPart Type;
+    public SandwichInventory.SandwichPart Type;
 
     // Use this for initialization
     void Start()
     {
+        Type = (SandwichInventory.SandwichPart)Random.Range(0, (int)SandwichInventory.SandwichPart.NumParts);
         GetComponent<SpriteRenderer>().sprite = FindObjectOfType<SandwichResources>().SandwichSprites[(int)Type];
     }
 
