@@ -35,7 +35,7 @@ public class SandwichEater : MonoBehaviour
     {
         animator.SetTrigger("Chomp");
         animator.SetLayerWeight(1, 1f);
-        timeSinceFood = Mathf.Max(0f, timeSinceFood - eatHungerTimeSubtract);
+        timeSinceFood = Mathf.Max(0f, timeSinceFood - eatHungerTimeSubtract * 0.5f);
     }
 
     public void EatSandwich()
