@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -24,6 +25,8 @@ public class GameController : MonoBehaviour
     [SerializeField] float groundPlatformSpawnThreshold = 3f;
     [SerializeField] float spawnX = 40f;
 
+    [SerializeField] Text GameOverText;
+
     // Game components.
     Rigidbody2D body;
 
@@ -44,6 +47,8 @@ public class GameController : MonoBehaviour
 
     void Start()
     {
+        GameOverText.enabled = false;
+
         body = GetComponent<Rigidbody2D>();
 
         // Set to loop at the bounds of the collider.
@@ -176,6 +181,7 @@ public class GameController : MonoBehaviour
         if (!finished) {
             finished = true;
             speedWhenHaltingBegan = scrollSpeed;
+            GameOverText.enabled = true;
         }
     }
 
