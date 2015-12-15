@@ -18,6 +18,7 @@ public class SandwichInventory : MonoBehaviour
     [SerializeField] public int NumRequiredLettuce = 1;
     [SerializeField] public int NumRequiredTomato = 1;
     [SerializeField] public GameObject SandwichType;
+    [SerializeField] public SandwichInventoryView View;
 
     // Use this for initialization
     void Start()
@@ -39,11 +40,8 @@ public class SandwichInventory : MonoBehaviour
 
     public bool AcceptSandwichPart(SandwichPart type)
     {
-        if (type >= SandwichPart.NumParts)
-        {
-            return (false);
-        }
-        if (mSandwichParts[(int)type] >= mSandwichPartLimits[(int)type])
+        if (type >= SandwichPart.NumParts ||
+            mSandwichParts[(int)type] >= mSandwichPartLimits[(int)type])
         {
             return (false);
         }
@@ -52,6 +50,7 @@ public class SandwichInventory : MonoBehaviour
         {
             MakeSandwich();
         }
+        View.UpdateSandwichState(mNumSandwiches, mSandwichParts);
         return (true);
     }
 
@@ -66,6 +65,7 @@ public class SandwichInventory : MonoBehaviour
                 mNumSandwiches -= 1;
             }
         }
+        View.UpdateSandwichState(mNumSandwiches, mSandwichParts);
         return (sandwich);
     }
 
