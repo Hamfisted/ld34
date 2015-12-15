@@ -23,12 +23,12 @@ public class SandwichEater : MonoBehaviour
     public void EatSandwich()
     {
         mFatLevel += 1;
+        animator.SetTrigger("Chomp");
+        animator.SetLayerWeight(1, 1);
         if(mFatLevel >= MaxFat)
         {
-            Destroy(gameObject);
-        } else {
-            animator.SetTrigger("Chomp");
-            animator.SetLayerWeight(1, 1);
+            // Destroy(gameObject);
+            GetComponent<EnemyCharacter>().Die();
         }
     }
 

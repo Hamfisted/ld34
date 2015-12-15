@@ -9,6 +9,12 @@ public class EnemyCharacter : Character
 
     // Enemy gameplay state.
     private GameObject target;
+    public bool isDead = false;
+
+    void Start()
+    {
+        StartCharacter();
+    }
 
     void Update()
     {
@@ -18,7 +24,11 @@ public class EnemyCharacter : Character
     // Per frame character update.
     protected virtual void UpdateAnimator()
     {
-        // animator.SetBool("OnGround", true);
-        // animator.SetTrigger("Chomp");
+        animator.SetBool("IsDead", isDead);
+    }
+
+    public void Die()
+    {
+        isDead = true;
     }
 }
