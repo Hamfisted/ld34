@@ -144,7 +144,7 @@ public class PlayerCharacter : Character
 
     void UpdateActions()
     {
-        if (Input.GetButtonDown("ThrowSandwich"))
+        if (Input.GetButtonDown("ThrowSandwich") && !hasWon && !isDead)
         {
             var sandy = gameObject.GetComponent<SandwichInventory>().UseSandwich();
             if (sandy)
