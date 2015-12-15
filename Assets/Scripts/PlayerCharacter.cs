@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(BoxCollider2D))]
 [RequireComponent(typeof(SandwichInventory))]
+[RequireComponent(typeof(PlayerHealth))]
 public class PlayerCharacter : Character
 {
     [SerializeField] public float JumpHeight = 2f;
@@ -24,7 +25,6 @@ public class PlayerCharacter : Character
     public bool offPlatform { get; private set; }
     public bool isDead = false;
     public bool hasWon = false;
-    public int health;
 
     void Start()
     {
@@ -40,7 +40,6 @@ public class PlayerCharacter : Character
         offPlatform = false;
         isDead = false;
         hasWon = false;
-        health = 3;
     }
 
     // Per-frame controller update.
@@ -65,11 +64,7 @@ public class PlayerCharacter : Character
 
     public void TakeDamage()
     {
-        health--;
-        if (health == 0)
-        {
-            isDead = true;
-        }
+        isDead = GetComponent<PlayerHealth>().TakeDamage(1);
     }
 
     // Update the movement of the player.
