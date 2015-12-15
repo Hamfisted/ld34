@@ -25,7 +25,8 @@ public class GameController : MonoBehaviour
     [SerializeField] float groundPlatformSpawnThreshold = 3f;
     [SerializeField] float spawnX = 40f;
 
-    [SerializeField] Text GameOverText;
+    [SerializeField] Text YouWonText;
+    [SerializeField] Text YouLostText;
 
     // Game components.
     Rigidbody2D body;
@@ -47,7 +48,8 @@ public class GameController : MonoBehaviour
 
     void Start()
     {
-        GameOverText.enabled = false;
+        YouWonText.enabled = false;
+        YouLostText.enabled = false;
 
         body = GetComponent<Rigidbody2D>();
 
@@ -167,8 +169,8 @@ public class GameController : MonoBehaviour
 
     void Win()
     {
-        GameOver();
         player.hasWon = true;
+        GameOver();
     }
 
     void Lose()
@@ -181,7 +183,15 @@ public class GameController : MonoBehaviour
         if (!finished) {
             finished = true;
             speedWhenHaltingBegan = scrollSpeed;
-            GameOverText.enabled = true;
+
+            if (player.hasWon)
+            {
+                YouWonText.enabled = true;
+            }
+            else
+            {
+                YouLostText.enabled = true;
+            }
         }
     }
 
