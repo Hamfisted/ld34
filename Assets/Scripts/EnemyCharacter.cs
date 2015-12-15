@@ -33,6 +33,13 @@ public class EnemyCharacter : Character
         if (!isDead)
         {
             timeSinceEatPlayer += Time.deltaTime;
+            angerFactor = eater.timeSinceFood / eater.MaxAngerHungryTime;
+
+            if (angerFactor >= 1f && player.offPlatform && timeSinceEatPlayer >= eater.eatHungerTimeSubtract)
+            {
+                timeSinceEatPlayer = 0f;
+                eater.EatPlayer();
+            }
         }
         UpdateAnimator();
     }
@@ -41,7 +48,6 @@ public class EnemyCharacter : Character
     {
         if (!isDead)
         {
-            angerFactor = eater.timeSinceFood / eater.MaxAngerHungryTime;
             float smoothedFactor = Mathf.Pow(angerFactor, 3f);
             float targetX = Mathf.Lerp(spawnPosition.x, player.GetBodyPosition().x - 1f, angerFactor);
             float currentX = Mathf.SmoothDamp(body.position.x, targetX, ref angerVelocity, AngerSmoothTime);
