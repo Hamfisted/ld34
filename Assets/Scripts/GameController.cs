@@ -176,7 +176,6 @@ public class GameController : MonoBehaviour
         if (!finished) {
             finished = true;
             speedWhenHaltingBegan = scrollSpeed;
-            enemy.Die();
         }
     }
 

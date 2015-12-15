@@ -139,6 +139,7 @@ public class PlayerCharacter : Character
     {
         animator.SetBool("OnGround", isGrounded);
         animator.SetBool("HasWon", hasWon);
+        animator.SetBool("IsDead", isDead);
     }
 
     void UpdateActions()
