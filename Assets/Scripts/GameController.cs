@@ -66,7 +66,7 @@ public class GameController : MonoBehaviour
         }
         else
         {
-            scrollSpeed = Mathf.Min(scrollSpeed + (Time.deltaTime * 1f), maximumSpeed);
+            scrollSpeed = Mathf.Lerp(startingSpeed, maximumSpeed, enemy.angerFactor);
 
             if (player.isDead)
             {

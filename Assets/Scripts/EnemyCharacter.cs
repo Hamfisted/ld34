@@ -15,6 +15,8 @@ public class EnemyCharacter : Character
     private Vector2 spawnPosition;
     private SandwichEater eater;
     private float angerVelocity;
+    private float timeSinceEatPlayer;
+    public float angerFactor;
 
     void Start()
     {
@@ -22,21 +24,31 @@ public class EnemyCharacter : Character
         spawnPosition = body.position;
         eater = GetComponent<SandwichEater>();
         angerVelocity = 0f;
+        timeSinceEatPlayer = 0f;
+        angerFactor = 0f;
     }
 
     void Update()
     {
+        if (!isDead)
+        {
+            timeSinceEatPlayer += Time.deltaTime;
+        }
         UpdateAnimator();
     }
 
     void FixedUpdate()
     {
-        float angerFactor = Mathf.Sqrt(eater.timeSinceFood / eater.MaxAngerHungryTime);
-        float targetX = Mathf.Lerp(spawnPosition.x, player.GetBodyPosition().x, angerFactor);
-        float currentX = Mathf.SmoothDamp(body.position.x, targetX, ref angerVelocity, AngerSmoothTime);
-        Vector2 position = new Vector2(currentX, body.position.y);
+        if (!isDead)
+        {
+            angerFactor = eater.timeSinceFood / eater.MaxAngerHungryTime;
+            float smoothedFactor = Mathf.Pow(angerFactor, 3f);
+            float targetX = Mathf.Lerp(spawnPosition.x, player.GetBodyPosition().x - 1f, angerFactor);
+            float currentX = Mathf.SmoothDamp(body.position.x, targetX, ref angerVelocity, AngerSmoothTime);
+            Vector2 position = new Vector2(currentX, body.position.y);
 
-        body.MovePosition(position);
+            body.MovePosition(position);
+        }
     }
 
     // Per frame character update.
