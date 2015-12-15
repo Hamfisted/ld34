@@ -21,6 +21,8 @@ public class GameController : MonoBehaviour
     [SerializeField] float maximumPlatformY = 12f;
     [SerializeField] float minimumDeltaY = 2f;
     [SerializeField] float maximumDeltaY = 4f;
+    [SerializeField] float groundPlatformSpawnThreshold = 3f;
+    [SerializeField] float spawnX = 40f;
 
     // Game components.
     Rigidbody2D body;
@@ -47,7 +49,7 @@ public class GameController : MonoBehaviour
         // Start up the game state.
         finished = false;
         scrollSpeed = startingSpeed;
-        spawnPoint = new Vector2(loopWidth, minimumPlatformY);
+        spawnPoint = new Vector2(spawnX, minimumPlatformY);
         platforms = new List<Platform>();
         StartCoroutine(SpawnPlatforms());
     }
@@ -111,7 +113,8 @@ public class GameController : MonoBehaviour
                 Vector2 lastPosition = latest.body.position;
                 float lastSize = latest.box.bounds.size.x;
                 float platformGap = jumpDistance + (lastSize * 0.5f);
-                Vector2 nextPosition = new Vector2(lastPosition.x + platformGap, lastPosition.y);
+                float newY = (player.offPlatform ? spawnPoint.y : lastPosition.y);
+                Vector2 nextPosition = new Vector2(lastPosition.x + platformGap, newY);
                 float distance = spawnPoint.x - lastPosition.x;
                 int spawnCount = (int)Mathf.Floor(distance / jumpDistance);
                 for (int i = 0; i < spawnCount; ++i)

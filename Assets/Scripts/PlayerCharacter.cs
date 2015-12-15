@@ -21,6 +21,7 @@ public class PlayerCharacter : Character
     private Vector2 velocity;
     public bool isGrounded { get; private set; }
     private bool isHoldingJump;
+    public bool offPlatform { get; private set; }
 
     void Start()
     {
@@ -33,6 +34,7 @@ public class PlayerCharacter : Character
         velocity = new Vector2();
         isGrounded = false;
         isHoldingJump = false;
+        offPlatform = false;
     }
 
     // Per-frame controller update.
@@ -80,6 +82,7 @@ public class PlayerCharacter : Character
         velocity += (Physics2D.gravity * Time.deltaTime * attenuation);
 
         // Check if we have floor below us if we're falling.
+        offPlatform = false;
         Vector2 velocityDelta = velocity * Time.deltaTime;
         Vector2 newPosition = position + velocityDelta;
         if (velocityDelta.y < 0f)
@@ -96,6 +99,11 @@ public class PlayerCharacter : Character
                 float maxY = collider.bounds.max.y;
                 if ((position.y >= maxY) && (newPosition.y < maxY))
                 {
+                    if (collider.CompareTag("Floor"))
+                    {
+                        offPlatform = true;
+                    }
+
                     if (collider.CompareTag("Floor") || collider.CompareTag("Platform"))
                     {
                         position.y = maxY;
